@@ -1,1 +1,3 @@
-# telegraam_snake_bot
+# Telegram Snake Bot
+
+A telegram game bot to play snake.
