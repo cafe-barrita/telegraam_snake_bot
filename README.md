@@ -22,8 +22,12 @@ To call the bot, start a chat with it. Then you can execute the following method
 
 ### Start
 
-Tel the bot "/start" and it will answer with the response provided in the code.
+Tell the bot "/start" or "/game" and it will answer with a link to the Snake game.
 
-### TODO
+### Help
 
-The method to play snake is still missing
+Tell the bot "/help" and it will list you the available commands.
+
+### Play Snake
+
+The Play Snake button redirects you to the snake game url. Unfortunately, it is still under developing.
