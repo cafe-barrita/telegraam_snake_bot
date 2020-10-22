@@ -5,8 +5,16 @@
 </head>
 <body>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<h1>Snake</h1>
+<canvas id="myCanvas" width="200" height="100"></canvas>
+<p>Score: <script type="text/javascript">document.write(score)</script></p>
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(0, 0, 150, 75);
+    var score = 0
+</script>
 
 </body>
 </html>

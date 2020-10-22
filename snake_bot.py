@@ -21,7 +21,7 @@ def snake(update, context):
     context.bot.answer_callback_query(
         callback_query_id=query_id,
         # url=f"https://t.me/jsm_snake_bot?game=snake&id={query_id}"
-        url="https://github.com/cafe-barrita/telegram_snake_bot"
+        url="https://htmlpreview.github.io/?https://github.com/cafe-barrita/telegram_snake_bot/blob/develop/snake.html"
     )
 
 def main():
