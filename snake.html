@@ -6,14 +6,78 @@
 <body>
 
 <h1>Snake</h1>
-<canvas id="myCanvas" width="200" height="100"></canvas>
-<p>Score: <script type="text/javascript">document.write(score)</script></p>
+<canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
+<p>Score: </p>
+<p id="score">0</p>
 <script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(0, 0, 150, 75);
-    var score = 0
+    class Rectangle {
+        constructor(x,y) {
+            this.x = x;
+            this.y = y
+        }
+
+        draw(color) {
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.x + 5, this.y + 5);
+        }
+    }
+    var red = "#FF0000";
+    var green = "#00FF00";
+    var white = "#FFFFFF";
+    class Snake {
+        constructor(){
+            this.rings = [];
+            this.direction = "right";
+            this.rings.push(new Rectangle(120, 60));
+            this.rings.push(new Rectangle(115, 60));
+            this.rings.push(new Rectangle(110, 60));
+        }
+
+        move() {
+            var x = this.rings[0].x;
+            var y = this.rings[0].y;
+            var next_ring = new Rectangle(x,y);
+            if (this.direction == "right"){
+              next_ring.x += 5;
+            }
+            if (this.direction == "left"){
+              next_ring.x -= 5
+            }
+            if (this.direction == "down"){
+              next_ring.y += 5
+            }
+            if (this.direction == "up"){
+              next_ring.y -= 5;
+            }
+            this.rings.pop()
+            this.rings.splice(0, 0, next_ring)
+            console.log(this.rings)
+        }
+
+        clear() {
+          for (var ring of this.rings) {
+            ring.draw(white);
+          }
+        }
+
+        draw() {
+          for (var ring of this.rings) {
+            ring.draw(green);
+          }
+        }
+    }
+    var score = 0;
+    var snake = new Snake();
+    snake.draw();
+    var intervalId = setInterval(function() {
+        snake.clear();
+        snake.move();
+        snake.draw();
+        document.getElementById("score").innerHTML = score;
+    },
+    100);
 </script>
 
 </body>
