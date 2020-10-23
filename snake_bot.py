@@ -20,7 +20,7 @@ def snake(update, context):
     query_id = update.callback_query.id
     context.bot.answer_callback_query(
         callback_query_id=query_id,
-        url="https://htmlpreview.github.io/?https://github.com/cafe-barrita/telegram_snake_bot/main/develop/snake.html"
+        url="https://htmlpreview.github.io/?https://github.com/cafe-barrita/telegram_snake_bot/blob/main/snake.html"
     )
 
 def main():
