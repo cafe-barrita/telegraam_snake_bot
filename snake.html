@@ -181,7 +181,7 @@
     
     snake.draw();
     var intervalId = setInterval(function() {
-      if (snake.check_collisions()){
+      if (game_over || snake.check_collisions()){
         end_game(game_over);
       }
       else {
