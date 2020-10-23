@@ -3,7 +3,7 @@
 <head>
 <title>Page Title</title>
 </head>
-<body>
+<body onkeydown="turn(event)">
 
 <h1>Snake</h1>
 <canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
@@ -20,9 +20,25 @@
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, this.x + 5, this.y + 5);
+            ctx.fillRect(this.x, this.y, 20, 20);
+            ctx.stroke();
         }
     }
+
+    function end_game(flag) {
+      if (flag){
+        return flag;
+      }
+      else {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#FF0000";
+        ctx.font = "50px Arial";
+        ctx.fillText("Game Over", 200, 100)
+        return true;
+      }
+    }
+
     var red = "#FF0000";
     var green = "#00FF00";
     var white = "#FFFFFF";
@@ -31,29 +47,14 @@
             this.rings = [];
             this.direction = "right";
             this.rings.push(new Rectangle(120, 60));
-            this.rings.push(new Rectangle(115, 60));
-            this.rings.push(new Rectangle(110, 60));
+            this.rings.push(new Rectangle(100, 60));
+            this.rings.push(new Rectangle(80, 60));
         }
 
         move() {
-            var x = this.rings[0].x;
-            var y = this.rings[0].y;
-            var next_ring = new Rectangle(x,y);
-            if (this.direction == "right"){
-              next_ring.x += 5;
-            }
-            if (this.direction == "left"){
-              next_ring.x -= 5
-            }
-            if (this.direction == "down"){
-              next_ring.y += 5
-            }
-            if (this.direction == "up"){
-              next_ring.y -= 5;
-            }
-            this.rings.pop()
-            this.rings.splice(0, 0, next_ring)
-            console.log(this.rings)
+            var next_ring = this.next_ring();
+            this.rings.pop();
+            this.rings = [next_ring].concat(this.rings);
         }
 
         clear() {
@@ -67,15 +68,137 @@
             ring.draw(green);
           }
         }
+
+        changeDirection(direction) {
+            if (direction == "left" && (this.rings[0].x - 20 != this.rings[1].x)) {
+                this.direction = direction;
+            }
+            if (direction == "right" && (this.rings[0].x + 20 != this.rings[1].x)) {
+                this.direction = direction;
+            }
+            if (direction == "up" && (this.rings[0].y - 20 != this.rings[1].y)) {
+                this.direction = direction;
+            }
+            if (direction == "down" && (this.rings[0].y + 20 != this.rings[1].y)) {
+                this.direction = direction;
+            }
+        }
+
+        next_ring() {
+            var x = this.rings[0].x;
+            var y = this.rings[0].y;
+            var next_ring = new Rectangle(x,y);
+            if (this.direction == "right"){
+              next_ring.x += 20;
+            }
+            if (this.direction == "left"){
+              next_ring.x -= 20;
+            }
+            if (this.direction == "down"){
+              next_ring.y += 20;
+            }
+            if (this.direction == "up"){
+              next_ring.y -= 20;
+            }
+            return next_ring
+        }
+
+        grow(){
+            var next_ring = this.next_ring();
+            this.rings = [next_ring].concat(this.rings);
+        }
+
+        contains(x, y) {
+          for (var i in this.rings) {
+            var ring = this.rings[i];
+            if (ring.x == x && ring.y == y){
+              return true;
+            }
+          }
+          return false;
+        }
+
+        check_collisions() {
+          var next_ring = this.next_ring();
+          if (next_ring.x < 0 || next_ring.x >= 800){
+            return true;
+          }
+          else if (next_ring.y < 0 || next_ring.y >= 400) {
+            return true;
+          }
+          else if (this.contains(next_ring.x, next_ring.y)) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        }
     }
+
+    class Food {
+      constructor(snake) {
+        this.spawn(snake)
+        console.log(this);
+      }
+
+      spawn(snake) {
+          var x = (Math.floor(Math.random() * 38) + 1) * 20;
+          var y = (Math.floor(Math.random() * 18) + 1) * 20;
+          while(snake.contains(x, y)) {
+            x = (Math.floor(Math.random() * 38) + 1) * 20;
+            y = (Math.floor(Math.random() * 18) + 1) * 20;
+          }
+          this.x = x;
+          this.y = y;
+          this.draw()
+      }
+
+      draw() {
+        var rect = new Rectangle(this.x, this.y);
+        rect.draw(red);
+      }
+    }
+
     var score = 0;
+    var game_over = false;
     var snake = new Snake();
+    var food = new Food(snake);
+
+    function turn(event) {
+      if (event.keyCode == 37) {
+        snake.changeDirection("left");
+      }
+      if (event.keyCode == 39) {
+        snake.changeDirection("right");
+      }
+      if (event.keyCode == 38) {
+        snake.changeDirection("up");
+      }
+      if (event.keyCode == 40) {
+        snake.changeDirection("down");
+      }
+    }
+    
     snake.draw();
     var intervalId = setInterval(function() {
+      if (snake.check_collisions()){
+        end_game(game_over);
+      }
+      else {
         snake.clear();
-        snake.move();
-        snake.draw();
+        var next_ring = snake.next_ring();
+        if (next_ring.x == food.x && next_ring.y == food.y) {
+          snake.grow();
+          score += 1;
+          snake.draw();
+          food = new Food(snake);
+        }
+        else {
+          snake.move(); 
+          snake.draw();
+        }
         document.getElementById("score").innerHTML = score;
+      }
     },
     100);
 </script>
