@@ -3,15 +3,25 @@
 <head>
 <title>Snake</title>
 </head>
-<body onkeydown="turn(event)">
+<style>
+    .button {
+        transition-duration: 0.4s;
+        font-size: 36px;
+    }
 
+    .button:hover {
+      background-color: #4CAF50; /* Green */
+      color: white;
+    }
+</style>
+<body onkeydown="turn(event)">
 <h1>Snake</h1>
 <canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
 <p>Score: <span id="score">0</span></p>
 <div style="text-align:center;">
-    <button onclick="move('up')">UP</button><br>
-    <button onclick="move('left')">LEFT</button><button onclick="move('right')">RIGHT</button><br>
-    <button onclick="move('down')">DOWN</button><br>
+    <button class="button" onclick="move('up')">UP</button><br>
+    <button class="button" onclick="move('left')">LEFT</button><button class="button" onclick="move('right')">RIGHT</button><br>
+    <button class="button" onclick="move('down')">DOWN</button><br>
 </div>
 <script>
     class Rectangle {
