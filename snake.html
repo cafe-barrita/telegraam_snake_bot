@@ -6,7 +6,7 @@
 <style>
     .button {
         transition-duration: 0.4s;
-        font-size: 64px;
+        font-size: 56px;
     }
 
     .button:hover {
@@ -17,7 +17,7 @@
 <body onkeydown="turn(event)">
 <h1>Snake</h1>
 <canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
-<p>Score: <span id="score">0</span></p>
+<p style="font-size:24px;">Score: <span id="score">0</span></p>
 <div style="text-align:center;">
     <button class="button" onclick="move('up')">UP</button><br><br>
     <button class="button" onclick="move('left')">LEFT</button>

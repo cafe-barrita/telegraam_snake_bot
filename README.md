@@ -33,4 +33,4 @@ Tell the bot "/help" and it will list you the available commands.
 
 ### Play Snake
 
-The Play Snake button redirects you to the snake game url. Unfortunately, it is still under developing.
+The Play Snake button redirects you to the snake game url. If you have a keyboard, you may use the arrows to control the direction of the snake, if you have a touch screen you may use the page buttons.  
