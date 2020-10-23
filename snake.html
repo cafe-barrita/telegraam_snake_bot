@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+<title>Snake</title>
 </head>
 <body onkeydown="turn(event)">
 
 <h1>Snake</h1>
 <canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
-<p>Score: </p>
-<p id="score">0</p>
+<p>Score: <span id="score">0</span></p>
+<div style="text-align:center;">
+    <button onclick="move('up')">UP</button><br>
+    <button onclick="move('left')">LEFT</button><button onclick="move('right')">RIGHT</button><br>
+    <button onclick="move('down')">DOWN</button><br>
+</div>
 <script>
     class Rectangle {
         constructor(x,y) {
@@ -34,7 +38,7 @@
         var ctx = canvas.getContext("2d");
         ctx.fillStyle = "#FF0000";
         ctx.font = "50px Arial";
-        ctx.fillText("Game Over", 200, 100)
+        ctx.fillText("Game Over", 240, 200)
         return true;
       }
     }
@@ -178,11 +182,14 @@
         snake.changeDirection("down");
       }
     }
-    
+
+    function move(direction) {
+        snake.changeDirection(direction);
+    }
     snake.draw();
     var intervalId = setInterval(function() {
       if (game_over || snake.check_collisions()){
-        end_game(game_over);
+        game_over = end_game(game_over);
       }
       else {
         snake.clear();
