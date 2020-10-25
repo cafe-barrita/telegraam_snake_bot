@@ -4,6 +4,8 @@ A telegram game bot to play snake.
 
 ## Installation
 
+### Local
+
 To run this bot, you will need an environment with a python3 client and pip. Then you can install the required libraries:
 ```
 pip[3] install -r requirements.txt
@@ -18,6 +20,28 @@ Once you have all the necessary requirements just run:
 ```
 python[3] snake_bot.py
 ``` 
+
+### Docker Deployment
+
+You can deploy the bot in a docker container. This option means you do not need any of the python requirements, but it requires a [docker application](https://docs.docker.com/get-docker/).   
+
+Same as before you will have to add your telegram bot token to the settings.py file, so that it contains:
+```
+TOKEN = "<Your token>"
+```
+
+Then you will have to build the docker image by executing in the repository folder:
+```
+docker build -t telegram_bot/snake .
+```
+The -t option serves to tag the generated image so it can be easily accesible later. If you do not like the name feel free to change it. Just remember to leave the "." at the end of the command.
+
+And the final step is to run a container with the generated docker image. If you gave the image a different name than this guide, remember to adapt this command as well.
+```
+docker run telegram_bot/snake
+```
+
+Now the bot should be successfully deployed in a docker container and ready to be used. If you want to know more about docker and what it offers, be sure to check [their official documentation](https://docs.docker.com/).
 
 ## Usage
 
