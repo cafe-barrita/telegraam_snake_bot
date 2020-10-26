@@ -38,7 +38,7 @@ The -t option serves to tag the generated image so it can be easily accesible la
 
 And the final step is to run a container with the generated docker image. If you gave the image a different name than this guide, remember to adapt this command as well.
 ```
-docker run telegram_bot/snake
+docker run -d telegram_bot/snake
 ```
 
 Now the bot should be successfully deployed in a docker container and ready to be used. If you want to know more about docker and what it offers, be sure to check [their official documentation](https://docs.docker.com/).
