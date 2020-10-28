@@ -14,17 +14,34 @@
       color: white;
     }
 </style>
-<body onkeydown="turn(event)">
+<body onkeydown="turn(event)" onload="onLoad()">
+<div style="text-align: center;">
 <h1>Snake</h1>
-<canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;"></canvas>
-<p style="font-size:24px;">Score: <span id="score">0</span></p>
+<canvas id="myCanvas" width="800" height="400" style="border:1px solid #000000;display: inline;"></canvas>
+</div>
+<div>
+<p style="font-size:24px;display: inline-block;float: left;vertical-align: middle;">Score: <span id="score">0</span></p>
+<button style="font-size: 24px;display: inline-block;float: right; vertical-align: middle;" onclick="start_game()">Restart</button>
+</div>
+<br>
 <div style="text-align:center;">
     <button class="button" onclick="move('up')">UP</button><br><br>
-    <button class="button" onclick="move('left')">LEFT</button>
+    <button class="button" onclick="move('left')">LEFT</button> 
     <button class="button" onclick="move('right')">RIGHT</button><br><br>
     <button class="button" onclick="move('down')">DOWN</button><br>
 </div>
 <script>
+    var red = "#FF0000";
+    var green = "#00FF00";
+    var white = "#FFFFFF";
+
+    var score;
+    var game_over;
+    var snake;
+    var food;
+    var rect_size = 20;
+    var mspf = 100;
+
     class Rectangle {
         constructor(x,y) {
             this.x = x;
@@ -35,7 +52,7 @@
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             ctx.fillStyle = color;
-            ctx.fillRect(this.x, this.y, 20, 20);
+            ctx.fillRect(this.x, this.y, rect_size, rect_size);
             ctx.stroke();
         }
     }
@@ -54,16 +71,13 @@
       }
     }
 
-    var red = "#FF0000";
-    var green = "#00FF00";
-    var white = "#FFFFFF";
     class Snake {
         constructor(){
             this.rings = [];
             this.direction = "right";
-            this.rings.push(new Rectangle(120, 60));
-            this.rings.push(new Rectangle(100, 60));
-            this.rings.push(new Rectangle(80, 60));
+            this.rings.push(new Rectangle(6*rect_size, 5*rect_size));
+            this.rings.push(new Rectangle(5*rect_size, 5*rect_size));
+            this.rings.push(new Rectangle(4*rect_size, 5*rect_size));
         }
 
         move() {
@@ -85,16 +99,16 @@
         }
 
         changeDirection(direction) {
-            if (direction == "left" && (this.rings[0].x - 20 != this.rings[1].x)) {
+            if (direction == "left" && (this.rings[0].x - rect_size != this.rings[1].x)) {
                 this.direction = direction;
             }
-            if (direction == "right" && (this.rings[0].x + 20 != this.rings[1].x)) {
+            if (direction == "right" && (this.rings[0].x + rect_size != this.rings[1].x)) {
                 this.direction = direction;
             }
-            if (direction == "up" && (this.rings[0].y - 20 != this.rings[1].y)) {
+            if (direction == "up" && (this.rings[0].y - rect_size != this.rings[1].y)) {
                 this.direction = direction;
             }
-            if (direction == "down" && (this.rings[0].y + 20 != this.rings[1].y)) {
+            if (direction == "down" && (this.rings[0].y + rect_size != this.rings[1].y)) {
                 this.direction = direction;
             }
         }
@@ -104,16 +118,16 @@
             var y = this.rings[0].y;
             var next_ring = new Rectangle(x,y);
             if (this.direction == "right"){
-              next_ring.x += 20;
+              next_ring.x += rect_size;
             }
             if (this.direction == "left"){
-              next_ring.x -= 20;
+              next_ring.x -= rect_size;
             }
             if (this.direction == "down"){
-              next_ring.y += 20;
+              next_ring.y += rect_size;
             }
             if (this.direction == "up"){
-              next_ring.y -= 20;
+              next_ring.y -= rect_size;
             }
             return next_ring
         }
@@ -153,15 +167,14 @@
     class Food {
       constructor(snake) {
         this.spawn(snake)
-        console.log(this);
       }
 
       spawn(snake) {
-          var x = (Math.floor(Math.random() * 38) + 1) * 20;
-          var y = (Math.floor(Math.random() * 18) + 1) * 20;
+          var x = (Math.floor(Math.random() * 38) + 1) * rect_size;
+          var y = (Math.floor(Math.random() * 18) + 1) * rect_size;
           while(snake.contains(x, y)) {
-            x = (Math.floor(Math.random() * 38) + 1) * 20;
-            y = (Math.floor(Math.random() * 18) + 1) * 20;
+            x = (Math.floor(Math.random() * 38) + 1) * rect_size;
+            y = (Math.floor(Math.random() * 18) + 1) * rect_size;
           }
           this.x = x;
           this.y = y;
@@ -174,10 +187,22 @@
       }
     }
 
-    var score = 0;
-    var game_over = false;
-    var snake = new Snake();
-    var food = new Food(snake);
+    function start_game() {
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      ctx.fillStyle = white;
+      ctx.fillRect(0, 0, 800, 400);
+      ctx.stroke();
+      score = 0;
+      game_over = false;
+      snake = new Snake();
+      food = new Food(snake);
+      snake.draw();
+    }
+
+    function onLoad(){
+      start_game()
+    }
 
     function turn(event) {
       if (event.keyCode == 37) {
@@ -197,7 +222,7 @@
     function move(direction) {
         snake.changeDirection(direction);
     }
-    snake.draw();
+
     var intervalId = setInterval(function() {
       if (game_over || snake.check_collisions()){
         game_over = end_game(game_over);
@@ -209,7 +234,7 @@
           snake.grow();
           score += 1;
           snake.draw();
-          food = new Food(snake);
+          food.spawn(snake);
         }
         else {
           snake.move(); 
@@ -218,7 +243,7 @@
         document.getElementById("score").innerHTML = score;
       }
     },
-    100);
+    mspf);
 </script>
 
 </body>
